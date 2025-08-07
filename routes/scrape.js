@@ -156,6 +156,14 @@ router.get("/location", async (req, res) => {
       await page.goto(link, { waitUntil: "networkidle2" });
       await sleep(1000);
 
+
+         if (details.length === 0) {
+    const html = await page.content();
+    console.log("===== DEBUG HTML START =====");
+    console.log(html);
+    console.log("===== DEBUG HTML END =====");
+  }
+
       // 1. Restaurant Name
       const name = await page.$eval("h1", el => el.innerText.trim()).catch(() => "N/A");
 
