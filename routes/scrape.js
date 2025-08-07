@@ -58,12 +58,17 @@ router.get("/location", async (req, res) => {
       const name = await page.$eval("h1", el => el.innerText.trim()).catch(() => "N/A");
 
       // 2. Address: Extract the line immediately after <h1>
-      const address = await page.evaluate(() => {
-        const h1 = document.querySelector("h1");
-        if (!h1 || !h1.nextSibling) return "N/A";
-        const text = h1.nextSibling.textContent.trim();
-        return text || "N/A";
-      });
+      // const address = await page.evaluate(() => {
+      //   const h1 = document.querySelector("h1");
+      //   if (!h1 || !h1.nextSibling) return "N/A";
+      //   const text = h1.nextSibling.textContent.trim();
+      //   return text || "N/A";
+      // });
+
+       const address = await page.$eval(
+        ".sc-clNaTc.ckqoPM",
+        el => el.innerText.trim()
+      ).catch(() => "N/A");
 
      
 
