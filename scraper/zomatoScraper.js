@@ -575,9 +575,15 @@ async function scrapeByLocation(city, area = '', limit = parseInt(process.env.AR
   const allLinks = new Set();
   const t0 = Date.now();
 
-  for (const cat of [null, 1, 3]) {
+  for (const cat of area
+    ? [1, 2, 3]
+    : [ "dine-out", "drinks-and-nightlife", "order-food-online"]) {
     let url = `${baseURL}/${locationPath}`;
-    if (cat) url += `?category=${cat}`;
+    if (area) {
+      if (cat) url += `?category=${cat}`;
+    } else {
+      if (cat) url += `${cat}`;
+    }
     console.log(`\n[INFO] Navigating to (${cat || 'default'}): ${url}`);
 
     try {
@@ -600,11 +606,11 @@ async function scrapeByLocation(city, area = '', limit = parseInt(process.env.AR
       $('a[href^="/"]').each((_, el) => {
         const href = $(el).attr('href');
         if (!href) return;
-        if (cat === 1) {
-          if (/(order|menu|restaurant)/.test(href)) {
+       if (cat === 1 || cat === "order-food-online" ) {
+          if (/(order|menu|restaurant|info)/.test(href)) {
             allLinks.add(baseURL + href);
           }
-        } else if (href.includes(`/${normalizedCity}/`) && href.includes('/info')) {
+        }  else if (href.includes(`/${normalizedCity}/`) && href.includes('/info')) {
           allLinks.add(baseURL + href);
         }
       });
